@@ -81,6 +81,7 @@ public class MainView {
 		btnLaunch.setActionCommand(LauncherActions.PLAY.name());
 		btnOptions.setActionCommand(LauncherActions.OPTIONS.name());
 		btnProfiles.setActionCommand(LauncherActions.PROFILES.name());
+		comboBoxProfiles.setActionCommand(LauncherActions.PROFILE_CHANGED.name());
 	}
 	
 	private void setupFromModel(MainModel model) {
@@ -104,9 +105,14 @@ public class MainView {
 		btnLaunch.addActionListener(controller);
 		btnProfiles.addActionListener(controller);
 		btnOptions.addActionListener(controller);
+		comboBoxProfiles.addActionListener(controller);
 	}
 	
 	public void show() {
 		frmDevlaunch.setVisible(true);
+	}
+	
+	public int getActiveProfile() {
+		return comboBoxProfiles.getSelectedIndex();
 	}
 }

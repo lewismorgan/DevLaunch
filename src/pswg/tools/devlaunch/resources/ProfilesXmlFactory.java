@@ -96,7 +96,6 @@ public class ProfilesXmlFactory {
 
         for (Node node : getChildNode (data)) {
             if (node.getNodeName().equals(PROFILES_CHILD_NODE)) {
-            	System.out.println("profile");
             	LauncherProfile p = new LauncherProfile();
             	p.setName(getAttributeValue(node, PROFILE_NAME));
             	p.setGameLoc(getAttributeValue(node, PROFILE_GAME));
