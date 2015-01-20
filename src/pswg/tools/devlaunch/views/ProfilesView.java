@@ -20,7 +20,7 @@ import javax.swing.JList;
 import javax.swing.JLabel;
 
 import pswg.tools.devlaunch.controllers.ProfilesController;
-import pswg.tools.devlaunch.models.ProfilesModel;
+import pswg.tools.devlaunch.models.MainModel;
 import pswg.tools.devlaunch.resources.LauncherProfile;
 import pswg.tools.devlaunch.resources.actions.ProfileActions;
 
@@ -28,11 +28,10 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 
 public class ProfilesView extends JFrame {
 	private static final long serialVersionUID = 1L;
-	
-	private ProfilesModel model;
 	
 	private JPanel contentPane;
 	private JPanel panelButtons;
@@ -53,12 +52,32 @@ public class ProfilesView extends JFrame {
 	
 	private boolean enabledEditing;
 	
-	public ProfilesView(ProfilesModel model) {
-		this.model = model;
+	public ProfilesView(MainModel model) {
+		setResizable(false);
 		this.enabledEditing = false;
 		initialize();
 		addActionCommands();
-		setupFromModel();
+		setupFromModel(model);
+	}
+	
+	public String getValueName() {
+		return tfName.getText();
+	}
+	
+	public String getValueGameDir() {
+		return tfGameDir.getText();
+	}
+	
+	public String getValueGameArgs() {
+		return tfLaunchArgs.getText();
+	}
+	
+	public String getValueAddress() {
+		return tfAddress.getText();
+	}
+	
+	public String getValuePort() {
+		return tfPort.getText();
 	}
 	
 	public void addController(ProfilesController controller) {
@@ -73,6 +92,7 @@ public class ProfilesView extends JFrame {
 		
 		// Misc
 		listProfiles.addListSelectionListener(controller);
+		
 	}
 
 	public void showProfileSettings(LauncherProfile profile) {
@@ -106,7 +126,7 @@ public class ProfilesView extends JFrame {
 		enabledEditing = true;
 	}
 	
-	private void setupFromModel() {
+	private void setupFromModel(MainModel model) {
 		populateProfilesList(model.getProfiles());
 	}
 	
@@ -129,7 +149,6 @@ public class ProfilesView extends JFrame {
 	 * Create the frame.
 	 */
 	private void initialize() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Manage Profiles");
 		setType(Type.UTILITY);
 		setBounds(100, 100, 580, 388);
@@ -150,7 +169,7 @@ public class ProfilesView extends JFrame {
 		btnNewProfile = new JButton("New Profile");
 		panelButtons.add(btnNewProfile);
 		
-		horizontalStrut = Box.createHorizontalStrut(65);
+		horizontalStrut = Box.createHorizontalStrut(70);
 		panelButtons.add(horizontalStrut);
 		
 		btnCancel = new JButton("Cancel Changes");
@@ -163,6 +182,7 @@ public class ProfilesView extends JFrame {
 		contentPane.add(scrollPaneProfiles, BorderLayout.WEST);
 		
 		listProfiles = new JList<LauncherProfile>();
+		listProfiles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listProfiles.setModel(new DefaultListModel<LauncherProfile>());
 		scrollPaneProfiles.setViewportView(listProfiles);
 		

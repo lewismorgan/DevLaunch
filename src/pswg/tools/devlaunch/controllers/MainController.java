@@ -4,14 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import pswg.tools.devlaunch.models.MainModel;
-import pswg.tools.devlaunch.models.ProfilesModel;
 import pswg.tools.devlaunch.views.MainView;
 import pswg.tools.devlaunch.views.ProfilesView;
 
 public class MainController implements ActionListener {
 
 	private MainModel model;
-	@SuppressWarnings("unused")
 	private MainView view;
 	
 	private ProfilesView profilesDialog;
@@ -46,10 +44,13 @@ public class MainController implements ActionListener {
 		profilesDialog.setVisible(true);
 	}
 	
+	public void updateProfiles() {
+		view.updateProfileSelections(model.getProfiles(), model.getActiveProfile());
+	}
+	
 	private void createProfilesDialog() {
-		ProfilesModel model = new ProfilesModel(this.model.getProfiles());
 		profilesDialog = new ProfilesView(model);
-		ProfilesController controller = new ProfilesController(model, profilesDialog);
+		ProfilesController controller = new ProfilesController(model, profilesDialog, this);
 		profilesDialog.addController(controller);
 	}
 }

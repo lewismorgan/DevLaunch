@@ -3,7 +3,6 @@ package pswg.tools.devlaunch.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import pswg.tools.devlaunch.DevLaunch;
 import pswg.tools.devlaunch.resources.LauncherProfile;
 
 public class MainModel {
@@ -12,12 +11,13 @@ public class MainModel {
 	
 	public MainModel() {
 		profiles = new ArrayList<LauncherProfile>();
-		LauncherProfile profile = DevLaunch.getDefaultLauncherProfile();
-		profiles.add(profile);
-		
 		setActiveProfile(0);
 	}
 
+	public MainModel(List<LauncherProfile> profiles) {
+		this.profiles = profiles;
+	}
+	
 	public int getActiveProfile() {
 		return activeProfile;
 	}
@@ -30,11 +30,24 @@ public class MainModel {
 		return profiles;
 	}
 	
-	public void setProfiles(List<LauncherProfile> profiles) {
-		this.profiles = profiles;
+	public void replaceProfiles(List<LauncherProfile> profiles) {
+		profiles.clear();
+		profiles.addAll(profiles);
 	}
 	
 	public void addProfile(LauncherProfile profile) {
 		profiles.add(profile);
+	}
+	
+	public void removeProfile(LauncherProfile profile) {
+		profiles.remove(profile);
+	}
+	
+	public void removeProfile(int index) {
+		profiles.remove(index);
+	}
+	
+	public LauncherProfile getProfile(int index) {
+		return profiles.get(index);
 	}
 }

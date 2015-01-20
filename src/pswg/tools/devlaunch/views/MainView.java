@@ -24,8 +24,6 @@ import pswg.tools.devlaunch.resources.actions.LauncherActions;
 
 public class MainView {
 
-	private MainModel model;
-
 	private JFrame frmDevlaunch;
 	private JButton btnLaunch;
 	private JButton btnProfiles;
@@ -33,11 +31,9 @@ public class MainView {
 	private JComboBox<LauncherProfile> comboBoxProfiles;
 	
 	public MainView(MainModel model) {
-		this.model = model;
-		
 		initialize();
 		addActionCommands();
-		setupFromModel();
+		setupFromModel(model);
 	}
 
 	/**
@@ -46,24 +42,23 @@ public class MainView {
 	private void initialize() {
 		frmDevlaunch = new JFrame();
 		frmDevlaunch.setTitle("ProjectSWG - DevLaunch");
-		frmDevlaunch.setBounds(100, 100, 379, 323);
+		frmDevlaunch.setBounds(100, 100, 628, 323);
 		frmDevlaunch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panelButtons = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panelButtons.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.RIGHT);
 		frmDevlaunch.getContentPane().add(panelButtons, BorderLayout.SOUTH);
 		
 		btnProfiles = new JButton("Profiles");
 		panelButtons.add(btnProfiles);
 		
 		btnOptions = new JButton("Options");
+		btnOptions.setEnabled(false);
 		panelButtons.add(btnOptions);
 		
 		Component horizontalStrut = Box.createHorizontalStrut(40);
 		panelButtons.add(horizontalStrut);
 		
-		btnLaunch = new JButton("Launch");
+		btnLaunch = new JButton("LAUNCH");
 		panelButtons.add(btnLaunch);
 		
 		JPanel panelProfiles = new JPanel();
@@ -88,7 +83,7 @@ public class MainView {
 		btnProfiles.setActionCommand(LauncherActions.PROFILES.name());
 	}
 	
-	private void setupFromModel() {
+	private void setupFromModel(MainModel model) {
 		populateProfileSelections(model.getProfiles());
 		comboBoxProfiles.setSelectedIndex(model.getActiveProfile());
 	}
@@ -97,6 +92,12 @@ public class MainView {
 		for (int index = 0; index < profiles.size(); index++) {
 			comboBoxProfiles.addItem(profiles.get(index));
 		}
+	}
+	
+	public void updateProfileSelections(List<LauncherProfile> updatedProfiles, int selection) {
+		comboBoxProfiles.setModel(new DefaultComboBoxModel<LauncherProfile>());
+		populateProfileSelections(updatedProfiles);
+		comboBoxProfiles.setSelectedIndex(selection);
 	}
 	
 	public void addController(MainController controller) {
