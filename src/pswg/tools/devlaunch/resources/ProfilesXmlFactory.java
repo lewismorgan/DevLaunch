@@ -37,6 +37,7 @@ public class ProfilesXmlFactory {
 	private static final String PROFILE_ARGS = "GameArgs";
 	private static final String PROFILE_ADDRESS = "ServerAddress";
 	private static final String PROFILE_PORT = "ServerPort";
+	private static final String PROFILE_BG = "Background";
 	
 	public static void save(List<LauncherProfile> profiles) throws ParserConfigurationException, TransformerException {
 		File baseFile = createBaseFile();
@@ -81,7 +82,7 @@ public class ProfilesXmlFactory {
         	setAttribute(file, profileDataNode, PROFILE_ARGS, profile.getGameArgs());
         	setAttribute(file, profileDataNode, PROFILE_ADDRESS, profile.getServerAddress());
         	setAttribute(file, profileDataNode, PROFILE_PORT, profile.getServerPort());
-        	
+        	setAttribute(file, profileDataNode, PROFILE_BG, profile.getBackground());
         	profilesNode.appendChild(profileDataNode);
         	
         }
@@ -102,6 +103,7 @@ public class ProfilesXmlFactory {
             	p.setGameArgs(getAttributeValue(node, PROFILE_ARGS));
             	p.setServerAddress(getAttributeValue(node, PROFILE_ADDRESS));
             	p.setServerPort(getAttributeValue(node, PROFILE_PORT));
+            	p.setBackground(getAttributeValue(node, PROFILE_BG));
             	profiles.add(p);
             }
         }

@@ -21,6 +21,8 @@ import pswg.tools.devlaunch.controllers.MainController;
 import pswg.tools.devlaunch.models.MainModel;
 import pswg.tools.devlaunch.resources.LauncherProfile;
 import pswg.tools.devlaunch.resources.actions.LauncherActions;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class MainView {
 
@@ -29,6 +31,7 @@ public class MainView {
 	private JButton btnProfiles;
 	private JButton btnOptions;
 	private JComboBox<LauncherProfile> comboBoxProfiles;
+	private JLabel backgroundImage;
 	
 	public MainView(MainModel model) {
 		initialize();
@@ -41,8 +44,9 @@ public class MainView {
 	 */
 	private void initialize() {
 		frmDevlaunch = new JFrame();
+		frmDevlaunch.setIconImage(Toolkit.getDefaultToolkit().getImage(MainView.class.getResource("/pswg/tools/devlaunch/resources/images/icon.png")));
 		frmDevlaunch.setTitle("ProjectSWG - DevLaunch");
-		frmDevlaunch.setBounds(100, 100, 628, 323);
+		frmDevlaunch.setBounds(100, 100, 650, 390);
 		frmDevlaunch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panelButtons = new JPanel();
@@ -73,8 +77,8 @@ public class MainView {
 		comboBoxProfiles.setModel(new DefaultComboBoxModel<LauncherProfile>());
 		panelProfiles.add(comboBoxProfiles);
 		
-		JLabel lblNewLabel = new JLabel("IMAGE");
-		frmDevlaunch.getContentPane().add(lblNewLabel, BorderLayout.CENTER);
+		backgroundImage = new JLabel("IMAGE");
+		frmDevlaunch.getContentPane().add(backgroundImage, BorderLayout.CENTER);
 	}
 
 	private void addActionCommands() {
@@ -87,6 +91,8 @@ public class MainView {
 	private void setupFromModel(MainModel model) {
 		populateProfileSelections(model.getProfiles());
 		comboBoxProfiles.setSelectedIndex(model.getActiveProfile());
+		LauncherProfile profile = model.getProfile(model.getActiveProfile());
+		setBackground(profile.getBackground());
 	}
 	
 	private void populateProfileSelections(List<LauncherProfile> profiles) {
@@ -114,5 +120,14 @@ public class MainView {
 	
 	public int getActiveProfile() {
 		return comboBoxProfiles.getSelectedIndex();
+	}
+	
+	public void setBackground(String imgLocation) {
+		if (imgLocation == null || imgLocation.isEmpty()) {
+			backgroundImage.setIcon(new ImageIcon(MainView.class.getResource("/pswg/tools/devlaunch/resources/images/default_bg.png")));
+		} else {
+			backgroundImage.setIcon(new ImageIcon(imgLocation));
+		}
+
 	}
 }

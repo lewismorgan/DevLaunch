@@ -38,6 +38,10 @@ public class MainController implements ActionListener {
 	
 	public void changeProfile() {
 		model.setActiveProfile(view.getActiveProfile());
+		
+		LauncherProfile active = model.getProfile(view.getActiveProfile());
+		view.setBackground(active.getBackground());
+		
 	}
 	
 	public void launchGame() {

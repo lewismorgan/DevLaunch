@@ -55,6 +55,7 @@ public class DevLaunch {
 		profile.setGameLoc("C:\\Program Files (x86)\\Star Wars Galaxies");
 		profile.setServerAddress("127.0.0.1");
 		profile.setServerPort("44453");
+		profile.setBackground("");
 		return profile;
 	}
 	

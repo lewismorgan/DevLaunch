@@ -7,6 +7,7 @@ public class LauncherProfile {
 	private String gameLoc;
 	private String serverAddress;
 	private String serverPort;
+	private String background;
 	
 	public LauncherProfile() {}
 	public LauncherProfile(String name) {
@@ -44,6 +45,15 @@ public class LauncherProfile {
 		this.serverPort = serverPort;
 	}
 	
+	public void setBackground(String background) {
+		this.background = background;
+	}
+	
+	public String getBackground() {
+		return background;
+	}
+	
 	@Override
 	public String toString() { return getName(); }
+
 }
