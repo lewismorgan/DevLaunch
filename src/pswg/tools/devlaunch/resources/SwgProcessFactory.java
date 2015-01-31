@@ -31,7 +31,7 @@ public class SwgProcessFactory {
 	}
 	
 	private static String getBaseArguments(LauncherProfile profile) {
-		return "cmd /c start SwgClient_r.exe -- -s " +
+		return "cmd /k start SwgClient_r.exe -- -s " +
 				"Station subscriptionFeatures=1 gameFeatures=65535 -s " +
 				"ClientGame loginServerPort0=" + profile.getServerPort() + " loginServerAddress0=" + profile.getServerAddress();
 	}
