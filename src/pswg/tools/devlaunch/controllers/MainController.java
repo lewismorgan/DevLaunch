@@ -63,9 +63,7 @@ public class MainController implements ActionListener {
 			System.out.println("Starting Game: " + gameExe.getAbsolutePath());
 			SwgProcessFactory.createProcess(profile, gameLoc);
 			if (exists) {
-				Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-						renameLoginCfg(new File(gameLoc + "\\login_bak.cfg"), gameLoc, "");
-				}, 5, TimeUnit.SECONDS);
+				Executors.newSingleThreadScheduledExecutor().schedule(() -> { renameLoginCfg(new File(gameLoc + "\\login_bak.cfg"), gameLoc, ""); }, 5, TimeUnit.SECONDS);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

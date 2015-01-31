@@ -88,7 +88,7 @@ public class ProfilesView extends JFrame {
 		btnApply.addActionListener(controller);
 		btnCancel.addActionListener(controller);
 		btnBrowseGame.addActionListener(controller);
-		//btnBrowseBg.addActionListener(controller);
+		btnBrowseBg.addActionListener(controller);
 		
 		// Misc
 		listProfiles.addListSelectionListener(controller);
@@ -119,9 +119,9 @@ public class ProfilesView extends JFrame {
 		tfLaunchArgs.setEnabled(true);
 		tfAddress.setEnabled(true);
 		tfPort.setEnabled(true);
-		//tfBg.setEnabled(true);
+		tfBg.setEnabled(true);
 		btnBrowseGame.setEnabled(true);
-		//btnBrowseBg.setEnabled(true);
+		btnBrowseBg.setEnabled(true);
 		
 		enabledEditing = true;
 	}
@@ -143,6 +143,7 @@ public class ProfilesView extends JFrame {
 		btnCancel.setActionCommand(ProfileActions.CLOSE.name());
 		btnBrowseGame.setActionCommand(ProfileActions.BROWSE_GAME.name());
 		btnBrowseBg.setActionCommand(ProfileActions.BROWSE_BG.name());
+		System.out.println("Action commands");
 	}
 	
 	/**

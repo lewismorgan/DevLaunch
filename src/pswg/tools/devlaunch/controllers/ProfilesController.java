@@ -4,10 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileView;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -36,13 +40,14 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		System.out.println("Action performed.");
 		switch(e.getActionCommand()) {
 		case "NEW": createNewProfile("New Profile"); break;
 		case "DELETE": break;
 		case "SAVE": saveAllProfiles(); closeView(); break;
 		case "CLOSE": closeView(); break;
 		case "BROWSE_GAME": break;
-		case "BROWSE_BG": break;
+		case "BROWSE_BG": handleBgBrowse(); break;
 		default: System.out.println("Unsure how to handle Action: " + e.getActionCommand());
 		}
 	}
@@ -94,6 +99,16 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 		mainController.updateProfiles();
 	}
 	
+	public void handleBgBrowse() {
+		System.out.println("showing");
+		JFileChooser fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.setFileFilter(new BasicImageFilter());
+		//fc.set
+		fc.showOpenDialog(view);
+	}
+	
 	public void closeView() {
 		view.setVisible(false);
 	}
@@ -106,5 +121,50 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		//saveAllProfiles();
+	}
+	
+	private class BasicImageFilter extends FileFilter {
+
+		@Override
+		public boolean accept(File f) {
+			if (f.isDirectory())
+				return false;
+			
+			String extension = getExtension(f);
+			if (extension == null)
+				return false;
+			
+			switch(extension) {
+			case "jpeg": return true;
+			case "jpg": return true;
+			case "png": return true;
+			default: return false;
+			}
+		}
+
+		@Override
+		public String getDescription() {
+			
+			return null;
+		}
+		
+		private String getExtension(File f) {
+	        String ext = null;
+	        String s = f.getName();
+	        int i = s.lastIndexOf('.');
+
+	        if (i > 0 &&  i < s.length() - 1) {
+	            ext = s.substring(i+1).toLowerCase();
+	        }
+	        return ext;
+	    }
+	}
+	
+	private class BasicImageFileView extends FileView {
+		@Override
+		public String getTypeDescription(File f) {
+			
+			return super.getTypeDescription(f);
+		}
 	}
 }
