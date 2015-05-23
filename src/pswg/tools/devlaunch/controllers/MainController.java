@@ -1,54 +1,46 @@
 package pswg.tools.devlaunch.controllers;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import pswg.tools.devlaunch.DevLaunch;
 import pswg.tools.devlaunch.models.MainModel;
 import pswg.tools.devlaunch.resources.LauncherProfile;
 import pswg.tools.devlaunch.resources.SwgProcessFactory;
-import pswg.tools.devlaunch.views.MainView;
-import pswg.tools.devlaunch.views.ProfilesView;
+import pswg.tools.devlaunch.resources.views.ProfilesDialog;
 
-public class MainController {
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class MainController implements Initializable {
 
 	private MainModel model;
-	private MainView view;
-	
-	private ProfilesView profilesDialog;
 
-	public MainController() {}
-	public MainController(MainModel model, MainView view) {
-		this.model = model;
-		this.view = view;
-	}
+	@FXML
+	private ImageView imageView;
+	@FXML
+	private ComboBox<LauncherProfile> profileBox;
 
-	public void actionPerformed(ActionEvent arg0) {
-		switch(arg0.getActionCommand()) {
-		case "PROFILES": showProfilesDialog(); break;
-		case "OPTIONS": showOptionsDialog(); break;
-		case "PLAY": launchGame(); break;
-		//case "PROFILE_CHANGED": changeProfile(); break;
-		default: System.out.println("Unsure how to handle Action: " + arg0.getActionCommand());
-		}
-	}
+	private ObservableList<LauncherProfile> profileObservableList;
 
-	/*
-	public void changeProfile() {
-		model.setActiveProfile(view.getActiveProfile());
-		
-		LauncherProfile active = model.getProfile(view.getActiveProfile());
-		view.setBackground(active.getBackground());
-		
-	}*/
-	
-	public void launchGame() {
-		LauncherProfile profile = model.getProfile(model.getActiveProfile());
-		
-		final String gameLoc = profile.getGameLoc();
+	private ProfilesDialog profilesDialog;
+	private LauncherProfile currentProfile;
+
+	@FXML
+	private void handleLaunchGame() {
+		if (!handleCheckCurrentProfile())
+			return;
+
+		final String gameLoc = currentProfile.getGameLoc();
 		File gameExe = new File(gameLoc + "\\SwgClient_r.exe");
 		
 		if (!gameExe.exists()) {
@@ -62,7 +54,7 @@ public class MainController {
 
 		try {
 			System.out.println("Starting Game: " + gameExe.getAbsolutePath());
-			SwgProcessFactory.launchGame(profile, gameLoc);
+			SwgProcessFactory.launchGame(currentProfile, gameLoc);
 			if (exists) {
 				Executors.newSingleThreadScheduledExecutor().schedule(() -> { renameLoginCfg(new File(gameLoc + "\\login_bak.cfg"), gameLoc, ""); }, 5, TimeUnit.SECONDS);
 			}
@@ -70,29 +62,66 @@ public class MainController {
 			e.printStackTrace();
 		}
 	}
-	
-	public void showOptionsDialog() {
-		
-	}
-	
-	public void showProfilesDialog() {
-		if (profilesDialog == null)
-			createProfilesDialog();
 
-		profilesDialog.setVisible(true);
+	@FXML
+	private void handleOpenProfilesDialog() {
+		if (profilesDialog == null) {
+			profilesDialog = new ProfilesDialog(DevLaunch.getInstance().getStage());
+		}
+
+		profilesDialog.showAndWait();
 	}
-	/*
-	public void updateProfiles() {
-		view.updateProfileSelections(model.getProfiles(), model.getActiveProfile());
-	}*/
-	
-	private void createProfilesDialog() {
-		profilesDialog = new ProfilesView(model);
-		ProfilesController controller = new ProfilesController(model, profilesDialog, this);
-		profilesDialog.addController(controller);
-	}
-	
+
 	private void renameLoginCfg(File base, String directory, String name) {
 		base.renameTo(new File(directory + "\\login" + name + ".cfg"));
+	}
+
+	private void handleChangeCurrentProfile(LauncherProfile profile) {
+		imageView.setImage(new Image("file:" + profile.getBackground()));
+	}
+
+	private boolean handleCheckCurrentProfile() {
+		if (currentProfile == null) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setTitle("DevLaunch");
+			alert.setHeaderText("Launch Game");
+			alert.setContentText("You must specify a profile to use from the Current Profiles selection box.");
+			alert.showAndWait();
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		model = new MainModel(DevLaunch.loadSavedProfiles());
+		profileObservableList = FXCollections.observableList(model.getProfiles());
+
+		profileBox.setItems(profileObservableList);
+		createListeners();
+	}
+
+	private void createListeners() {
+		profileBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue == newValue)
+				return;
+
+			setCurrentProfile(newValue);
+		});
+	}
+
+	public LauncherProfile getCurrentProfile() {
+		return currentProfile;
+	}
+
+	public void setCurrentProfile(LauncherProfile currentProfile) {
+		this.currentProfile = currentProfile;
+
+		int index = model.getProfiles().indexOf(currentProfile);
+		if (index != -1)
+			model.setActiveProfile(model.getProfiles().indexOf(currentProfile));
+
+		handleChangeCurrentProfile(currentProfile);
 	}
 }

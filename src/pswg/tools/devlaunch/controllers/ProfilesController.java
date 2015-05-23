@@ -1,69 +1,24 @@
 package pswg.tools.devlaunch.controllers;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileView;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
+import javafx.fxml.Initializable;
 import pswg.tools.devlaunch.DevLaunch;
 import pswg.tools.devlaunch.models.MainModel;
 import pswg.tools.devlaunch.resources.LauncherProfile;
 import pswg.tools.devlaunch.resources.ProfilesXmlFactory;
-import pswg.tools.devlaunch.views.ProfilesView;
 
-public class ProfilesController extends WindowAdapter implements ActionListener, ListSelectionListener{
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class ProfilesController implements Initializable {
 
 	private MainModel model;
-	private ProfilesView view;
-	
+
 	private int profilesCreated;
 	private MainController mainController;
-	
-	private int selectedProfile;
-	
-	public ProfilesController(MainModel model, ProfilesView view, MainController mainController) {
-		this.model = model;
-		this.view = view;
-		this.profilesCreated = 0;
-		this.mainController = mainController;
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("Action performed.");
-		switch(e.getActionCommand()) {
-		case "NEW": createNewProfile("New Profile"); break;
-		case "DELETE": break;
-		case "SAVE": saveAllProfiles(); closeView(); break;
-		case "CLOSE": closeView(); break;
-		case "BROWSE_GAME": break;
-		case "BROWSE_BG": handleBgBrowse(); break;
-		default: System.out.println("Unsure how to handle Action: " + e.getActionCommand());
-		}
-	}
 
-	@Override
-	public void valueChanged(ListSelectionEvent event) {
-		@SuppressWarnings("unchecked")
-		JList<LauncherProfile> selectionModel = (JList<LauncherProfile>) event.getSource();
-		int selection = selectionModel.getSelectedIndex();
-		if (selection == -1)
-			return;
-		
-		selectedProfile = selection;
-		view.showProfileSettings(model.getProfile(selection));
-	}
-	
 	public void createNewProfile(String name) {
 		saveAllProfiles();
 		
@@ -71,7 +26,7 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 		profile.setName((profilesCreated == 0) ? name : name +" "+String.valueOf(profilesCreated));
 		model.addProfile(profile);
 
-		view.updateProfilesList(model.getProfiles());
+		//view.updateProfilesList(model.getProfiles());
 		
 		profilesCreated++;
 	}
@@ -79,7 +34,7 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 	
 	public void saveAllProfiles() {
 		for (int i = 0; i < model.getProfiles().size(); i++) {
-			if (i == selectedProfile) {
+/*			if (i == selectedProfile) {
 				LauncherProfile p = model.getProfile(i);
 				p.setName(view.getValueName());
 				p.setGameLoc(view.getValueGameDir());
@@ -87,7 +42,7 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 				p.setServerAddress(view.getValueAddress());
 				p.setServerPort(view.getValuePort());
 				break;
-			}
+			}*/
 		}
 
 		try {
@@ -98,73 +53,9 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 		
 		//mainController.updateProfiles();
 	}
-	
-	public void handleBgBrowse() {
-		System.out.println("showing");
-		JFileChooser fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fc.setAcceptAllFileFilterUsed(false);
-		fc.setFileFilter(new BasicImageFilter());
-		//fc.set
-		fc.showOpenDialog(view);
-	}
-	
-	public void closeView() {
-		view.setVisible(false);
-	}
-	
+
 	@Override
-	public void windowActivated(WindowEvent e) {
-		view.updateProfilesList(model.getProfiles());
-	}
-	
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		//saveAllProfiles();
-	}
-	
-	private class BasicImageFilter extends FileFilter {
+	public void initialize(URL location, ResourceBundle resources) {
 
-		@Override
-		public boolean accept(File f) {
-			if (f.isDirectory())
-				return false;
-			
-			String extension = getExtension(f);
-			if (extension == null)
-				return false;
-			
-			switch(extension) {
-			case "jpeg": return true;
-			case "jpg": return true;
-			case "png": return true;
-			default: return false;
-			}
-		}
-
-		@Override
-		public String getDescription() {
-			
-			return null;
-		}
-		
-		private String getExtension(File f) {
-	        String ext = null;
-	        String s = f.getName();
-	        int i = s.lastIndexOf('.');
-
-	        if (i > 0 &&  i < s.length() - 1) {
-	            ext = s.substring(i+1).toLowerCase();
-	        }
-	        return ext;
-	    }
-	}
-	
-	private class BasicImageFileView extends FileView {
-		@Override
-		public String getTypeDescription(File f) {
-			
-			return super.getTypeDescription(f);
-		}
 	}
 }
