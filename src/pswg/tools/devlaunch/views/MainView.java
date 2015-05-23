@@ -25,7 +25,7 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 
 public class MainView {
-
+/*
 	private JFrame frmDevlaunch;
 	private JButton btnLaunch;
 	private JButton btnProfiles;
@@ -39,9 +39,9 @@ public class MainView {
 		setupFromModel(model);
 	}
 
-	/**
+	*//**
 	 * Initialize the contents of the frame.
-	 */
+	 *//*
 	private void initialize() {
 		frmDevlaunch = new JFrame();
 		frmDevlaunch.setIconImage(Toolkit.getDefaultToolkit().getImage(MainView.class.getResource("/pswg/tools/devlaunch/resources/images/icon.png")));
@@ -129,5 +129,5 @@ public class MainView {
 			backgroundImage.setIcon(new ImageIcon(imgLocation));
 		}
 
-	}
+	}*/
 }

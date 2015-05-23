@@ -96,7 +96,7 @@ public class ProfilesController extends WindowAdapter implements ActionListener,
 			e.printStackTrace();
 		}
 		
-		mainController.updateProfiles();
+		//mainController.updateProfiles();
 	}
 	
 	public void handleBgBrowse() {

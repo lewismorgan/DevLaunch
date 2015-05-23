@@ -10,6 +10,11 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
 import pswg.tools.devlaunch.controllers.MainController;
@@ -19,34 +24,18 @@ import pswg.tools.devlaunch.resources.ProfilesXmlFactory;
 import pswg.tools.devlaunch.views.MainView;
 
 
-public class DevLaunch {
+public class DevLaunch extends Application {
 
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1) {
-			e1.printStackTrace();
-		}
+		launch(args);
+	}
 
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-
-				List<LauncherProfile> profiles = loadSavedProfiles();
-				if (profiles == null) {
-					profiles = new ArrayList<LauncherProfile>();
-					profiles.add(getDefaultLauncherProfile());
-				}
-				
-				MainModel model = new MainModel(profiles);
-				MainView view = new MainView(model);
-				MainController controller = new MainController(model, view);
-				view.addController(controller);
-				view.show();
-			}
-			
-		});
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Parent root = FXMLLoader.load(getClass().getResource("resources/design/sample.fxml"));
+		primaryStage.setTitle("Hello World");
+		primaryStage.setScene(new Scene(root, 300, 275));
+		primaryStage.show();
 	}
 
 	public static LauncherProfile getDefaultLauncherProfile() {

@@ -13,36 +13,37 @@ import pswg.tools.devlaunch.resources.SwgProcessFactory;
 import pswg.tools.devlaunch.views.MainView;
 import pswg.tools.devlaunch.views.ProfilesView;
 
-public class MainController implements ActionListener {
+public class MainController {
 
 	private MainModel model;
 	private MainView view;
 	
 	private ProfilesView profilesDialog;
-	
+
+	public MainController() {}
 	public MainController(MainModel model, MainView view) {
 		this.model = model;
 		this.view = view;
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		switch(arg0.getActionCommand()) {
 		case "PROFILES": showProfilesDialog(); break;
 		case "OPTIONS": showOptionsDialog(); break;
 		case "PLAY": launchGame(); break;
-		case "PROFILE_CHANGED": changeProfile(); break;
+		//case "PROFILE_CHANGED": changeProfile(); break;
 		default: System.out.println("Unsure how to handle Action: " + arg0.getActionCommand());
 		}
 	}
-	
+
+	/*
 	public void changeProfile() {
 		model.setActiveProfile(view.getActiveProfile());
 		
 		LauncherProfile active = model.getProfile(view.getActiveProfile());
 		view.setBackground(active.getBackground());
 		
-	}
+	}*/
 	
 	public void launchGame() {
 		LauncherProfile profile = model.getProfile(model.getActiveProfile());
@@ -80,10 +81,10 @@ public class MainController implements ActionListener {
 
 		profilesDialog.setVisible(true);
 	}
-	
+	/*
 	public void updateProfiles() {
 		view.updateProfileSelections(model.getProfiles(), model.getActiveProfile());
-	}
+	}*/
 	
 	private void createProfilesDialog() {
 		profilesDialog = new ProfilesView(model);
