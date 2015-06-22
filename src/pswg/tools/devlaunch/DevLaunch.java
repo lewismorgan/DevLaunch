@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import pswg.tools.devlaunch.controllers.MainController;
+import pswg.tools.devlaunch.resources.DialogUtils;
 import pswg.tools.devlaunch.resources.LauncherProfile;
 import pswg.tools.devlaunch.resources.ProfilesXmlFactory;
 
@@ -26,9 +27,13 @@ public class DevLaunch extends Application {
 
 	public static void main(String[] args) {
 		if (instance != null) {
-			System.out.println("Tried launching a second instance.");
+			DialogUtils.showInformationDialog("Only one instance of DevLaunch can be active at a time. Please close the existing instance to open a new one.");
 			return;
 		}
+		Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+			throwable.printStackTrace();
+			//DialogUtils.showExceptionDialog(throwable);
+		});
 		launch(args);
 	}
 
@@ -52,11 +57,12 @@ public class DevLaunch extends Application {
 
 		try {
 			profiles = ProfilesXmlFactory.open(fSavedProfiles);
+			if (profiles == null) {
+				DialogUtils.showErrorMessage("DevLaunch was not able to open a valid profiles file. This can be fixed by creating a new profile.");
+			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
+			DialogUtils.showExceptionDialog(e);
 		}
-
-		profiles.forEach(profile -> System.out.println(profile));
 		return profiles;
 	}
 
@@ -81,6 +87,7 @@ public class DevLaunch extends Application {
 
 		primaryStage.show();
 
+		//new ConsoleDialog(primaryStage).show();
 		this.stage = primaryStage;
 	}
 
