@@ -13,15 +13,15 @@ public class ConsoleDialog extends ApplicationDialog {
         super(parent, "SWGClient_r.exe Console Output");
     }
 
-    public void print(String message) {
-        getController().print(message);
-    }
+	public void print(int process, String message) {
+		getController().print(process, message);
+	}
 
     public void watchProcess(Process process) {
         ConsoleController controller = getController();
 
-        controller.addProcessTab(process.getInputStream(), "Process [" + watchCount + "]");
-        watchCount++;
+	    controller.addInputStream(process.getInputStream(), "Process [" + watchCount + "]");
+	    watchCount++;
     }
 
     @Override
@@ -35,4 +35,7 @@ public class ConsoleDialog extends ApplicationDialog {
         return super.getController();
     }
 
+	public int getWatchCount() {
+		return watchCount;
+	}
 }

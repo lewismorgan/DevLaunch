@@ -17,14 +17,28 @@ public class SwgProcessFactory {
 	}
 
 	public void launchGame(LauncherProfile profile, String location) throws IOException {
-		if (!console.isShowing())
+		if (!console.isShowing() && profile.isConsoleEnabled())
 			console.show();
 
 		try {
-			Process process = createClientProcess(getBaseArguments(profile) + " " + profile.getGameArgs(), location);
-			console.watchProcess(process);
+			String args = getBaseArguments(profile) + " " + profile.getGameArgs();
+			if (profile.isConsoleEnabled()) {
+				Process process = createClientProcess(args, location);
+				console.watchProcess(process);
+				console.print(console.getWatchCount() - 1, String.format("SwgClient_r.exe launching with arguments %s%n%n", args));
+			} else {
+				createClientProcess(args, location);
+			}
 		} catch (IOException e) {
 			DialogUtils.showExceptionDialog(e);
+		}
+	}
+
+	public void launchGameSettings(String location) {
+		try {
+			createClientProcess("cmd start /c SwgClientSetup_r.exe", location);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

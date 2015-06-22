@@ -1,6 +1,6 @@
 package pswg.tools.devlaunch.resources;
 
-public class LauncherProfile {
+public class LauncherProfile implements Cloneable {
 
 	private String name;
 	private String gameArgs;
@@ -8,6 +8,7 @@ public class LauncherProfile {
 	private String serverAddress;
 	private String serverPort;
 	private String background;
+	private boolean console;
 	
 	public LauncherProfile() {}
 	public LauncherProfile(String name) {
@@ -44,16 +45,44 @@ public class LauncherProfile {
 	public void setServerPort(String serverPort) {
 		this.serverPort = serverPort;
 	}
-	
-	public void setBackground(String background) {
-		this.background = background;
-	}
-	
+
 	public String getBackground() {
 		return background;
 	}
-	
+
+	public void setBackground(String background) {
+		this.background = background;
+	}
+
+	public boolean isConsoleEnabled() {
+		return console;
+	}
+
+	public void setConsole(boolean console) {
+		this.console = console;
+	}
+
 	@Override
 	public String toString() { return getName(); }
 
+	@Override
+	public LauncherProfile clone() {
+		LauncherProfile copy = null;
+		try {
+			copy = (LauncherProfile) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			DialogUtils.showExceptionDialog(e);
+		}
+		if (copy == null)
+			return null;
+
+		copy.name = name;
+		copy.gameArgs = gameArgs;
+		copy.serverAddress = serverAddress;
+		copy.serverPort = serverPort;
+		copy.background = background;
+		copy.console = console;
+		return copy;
+	}
 }

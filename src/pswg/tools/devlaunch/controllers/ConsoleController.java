@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -32,12 +33,12 @@ public class ConsoleController implements Initializable {
         VBox.setVgrow(tabPane, Priority.ALWAYS);
     }
 
-    public void print(String message) {
-        System.out.println(message);
-    }
+	public void print(int processId, String message) {
+		((ConsoleTab) tabPane.getTabs().get(processId)).addLine(message);
+	}
 
-    public void addProcessTab(InputStream stream, String name) {
-        final ConsoleTab tab = new ConsoleTab(name);
+	public void addInputStream(InputStream stream, String name) {
+		final ConsoleTab tab = new ConsoleTab(name);
         tabPane.getTabs().add(tab);
 
         // TODO: Create tab's body
@@ -76,7 +77,10 @@ public class ConsoleController implements Initializable {
             textArea.setWrapText(true);
             textArea.setEditable(false);
 
+	        HBox buttons = new HBox();
+
             parent.getChildren().add(textArea);
+	        parent.getChildren().add(buttons);
 
             VBox.setVgrow(textArea, Priority.ALWAYS);
 

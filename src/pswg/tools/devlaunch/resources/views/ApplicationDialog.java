@@ -23,6 +23,8 @@ public abstract class ApplicationDialog extends Stage {
         this.setTitle(title);
         this.setResizable(false);
         createViewContent();
+
+	    initialize();
     }
 
     private void createViewContent() {
@@ -41,11 +43,10 @@ public abstract class ApplicationDialog extends Stage {
 
     protected abstract String getDesignPath();
 
-    public final void display() {
-        showAndWait();
-    }
+	protected void initialize() {
+	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
     public <T extends Initializable> T getController() {
         return (T) controller;
     }

@@ -24,6 +24,8 @@ public class DialogUtils {
     }
 
     public static void showExceptionDialog(Throwable throwable) {
+	    throwable.printStackTrace();
+
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("DevLaunch Dialog");
         alert.setHeaderText("Thrown Exception");
