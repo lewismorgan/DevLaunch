@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="471.0" prefWidth="650.0" stylesheets="@main_style.css"
+            xmlns="http://javafx.com/javafx/null" fx:controller="pswg.tools.devlaunch.controllers.MainController">
+    <top>
+        <ToolBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <items>
+                <Label text="Current Profile"/>
+                <ComboBox fx:id="profileBox"/>
+            </items>
+        </ToolBar>
+    </top>
+    <center>
+        <VBox alignment="CENTER">
+            <children>
+                <ImageView fx:id="imageView" fitHeight="390.0" fitWidth="650.0" pickOnBounds="true"
+                           preserveRatio="true"/>
+            </children>
+        </VBox>
+    </center>
+    <bottom>
+        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <items>
+                <Button mnemonicParsing="false" onAction="#handleOpenProfilesDialog" text="Manage Profiles"/>
+                <Pane prefWidth="40.0"/>
+                <Button mnemonicParsing="false" onAction="#handleOpenGameSettings" text="Game Settings"/>
+                <Button disable="true" mnemonicParsing="false" onAction="#handleClearCrashLogs"
+                        text="Clear Crash Logs"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button id="button-launch" mnemonicParsing="false" onAction="#handleLaunchGame" prefHeight="25.0"
+                        prefWidth="112.0" text="Launch">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Button>
+            </items>
+        </ToolBar>
+    </bottom>
+</BorderPane>

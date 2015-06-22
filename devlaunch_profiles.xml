@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<DevLaunch>
-    <Profiles>
-        <LauncherProfile Background=".\jawa_background.png" GameArgs="-s Station sessionId=Wave-pass" GameDirectory="C:\Program Files (x86)\Star Wars Galaxies" Name="Local Connection" ServerAddress="127.0.0.1" ServerPort="44453"/>
-    </Profiles>
-</DevLaunch>

@@ -1,11 +1,7 @@
 package pswg.tools.devlaunch.resources;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,14 +12,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfilesXmlFactory {
 	
@@ -38,6 +32,7 @@ public class ProfilesXmlFactory {
 	private static final String PROFILE_ADDRESS = "ServerAddress";
 	private static final String PROFILE_PORT = "ServerPort";
 	private static final String PROFILE_BG = "Background";
+	private static final String PROFILE_CONSOLE = "Console";
 	
 	public static void save(List<LauncherProfile> profiles) throws ParserConfigurationException, TransformerException {
 		File baseFile = createBaseFile();
@@ -83,7 +78,8 @@ public class ProfilesXmlFactory {
         	setAttribute(file, profileDataNode, PROFILE_ADDRESS, profile.getServerAddress());
         	setAttribute(file, profileDataNode, PROFILE_PORT, profile.getServerPort());
         	setAttribute(file, profileDataNode, PROFILE_BG, profile.getBackground());
-        	profilesNode.appendChild(profileDataNode);
+	        setAttribute(file, profileDataNode, PROFILE_CONSOLE, String.valueOf(profile.isConsoleEnabled()));
+	        profilesNode.appendChild(profileDataNode);
         	
         }
         return root;
@@ -104,7 +100,8 @@ public class ProfilesXmlFactory {
             	p.setServerAddress(getAttributeValue(node, PROFILE_ADDRESS));
             	p.setServerPort(getAttributeValue(node, PROFILE_PORT));
             	p.setBackground(getAttributeValue(node, PROFILE_BG));
-            	profiles.add(p);
+	            p.setConsole(Boolean.parseBoolean(getAttributeValue(node, PROFILE_CONSOLE)));
+	            profiles.add(p);
             }
         }
         
@@ -122,6 +119,7 @@ public class ProfilesXmlFactory {
                 }
             }
         } catch (DOMException e) {
+	        DialogUtils.showExceptionDialog(e);
         }
         return null;
     }
