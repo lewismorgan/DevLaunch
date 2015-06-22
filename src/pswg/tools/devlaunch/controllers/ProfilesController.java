@@ -174,6 +174,7 @@ public class ProfilesController implements Initializable {
 			disableInterfaceElements(true);
 			profileListView.getSelectionModel().select(-1);
 		}
+		profileListView.setItems(profileListView.getItems());
 	}
 
 	public void onApplyChanges(ActionEvent event) {
@@ -253,8 +254,6 @@ public class ProfilesController implements Initializable {
 			LauncherProfile selectedItem = profileListView.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				cacheProfile(selectedItem);
-				// Refresh the UI
-				profileObservableList.set(getSelectedIndex(), selectedItem);
 			}
 		}
 	}
